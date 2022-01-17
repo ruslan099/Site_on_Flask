@@ -1,0 +1,45 @@
+body {
+    background: #b8b6b6;
+}
+
+.my-2 {
+    font-size: 1.1em;
+}
+h1, h2, h3 {
+    font-family: "Roboto", sans-serif;
+}
+#crt_but {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+#block {
+    border-radius: 30px;
+}
+
+#text_abt {
+    text-align: center;
+    color: black;
+}
+
+#title_abt {
+    text-align: center;
+}
+
+#date_art {
+    color: black;
+}
+
+#btn-main  {
+    color: black;
+}
+
+
+#osnovnoy {
+    height: 150px;
+}
+
+#login_info {
+    color: red;
+    margin-bottom: 1.2em;
+}

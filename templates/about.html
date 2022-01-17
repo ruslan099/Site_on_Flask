@@ -1,0 +1,15 @@
+{% extends 'base.html' %}     <!-- Указываем, что наследуем все от шаблона 'base.html' -->
+
+{% block title %}
+Страница про нас
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Немного про нас</h1>
+    <div class="alert alert-info" id="info-block">
+        <p><h1 id="title_abt">Описание сайта</h1></p>
+        <p><h3 id="text_abt">Сайт создан для публикации учебного материала</h3></p>
+    </div>
+</div>
+{% endblock %}

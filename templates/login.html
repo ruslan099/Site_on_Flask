@@ -1,0 +1,19 @@
+{% extends 'base.html' %}     <!-- Указываем, что наследуем все от шаблона 'base.html' -->
+
+{% block title %}
+Страница про нас
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Авторизация на сайте</h1>
+    <div class="alert alert-info" id="auth-block">
+        <form action="/create-article" method="post">     <!-- Создаем форму и Указываем, на какой странице будет производиться обработка данных -->
+            <label id="login_info"><b>Данный блок находится в разработке!</b></label><br>
+            <input type="email" name="login" id="login" class="form-control" placeholder="Логин"><br>
+            <input type="text" name="pwd" id="pwd" class="form-control" placeholder="Пароль"><br>
+            <input type="submit" class="btn btn-success" value="Войти" disabled>
+        </form>
+    </div>
+</div>
+{% endblock %}
