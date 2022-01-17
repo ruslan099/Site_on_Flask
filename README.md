@@ -3,7 +3,9 @@
 
 К сайту подключена база данных PSQL
 
-modules:
+modules and languages:
 - python v3.8
 - flask
 - SQL-Alchemy
+- html
+- css
