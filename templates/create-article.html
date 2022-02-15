@@ -7,6 +7,9 @@
 {% block body %}
 <div class="container">
     <h1>Добавление записи на сайт</h1>
+    {% for cat, msg in get_flashed_messages(True) %}
+    </div class="flash {{cat}}">{{msg}}</div>
+    {% endfor %}
     <form action="/create-article" method="post">     <!-- Создаем форму и Указываем, на какой странице будет производиться обработка данных -->
         <input type="text" name="title" id="title" class="form-control" placeholder="Введите название"><br>
         <textarea name="intro" id="intro" class="form-control" placeholder="Краткая информация"></textarea><br>

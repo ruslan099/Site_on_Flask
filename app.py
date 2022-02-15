@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -7,6 +7,7 @@ from werkzeug.utils import redirect
 app = Flask(__name__)           # Создаем объект на основе класса Flask и передаем в конструктор основной файл через __name__
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///blog.db'      #указываем название БД для работы
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False             #отключаем неработающий модуль
+app.config['SECRET_KEY'] = 'aweh234k2rn214uioh2189r23rn1982r3' #Секретный ключ для шифрования данных и вывода flash сообщений
 db = SQLAlchemy(app)               # Создаем объект на основе класса SQLalchemy и в конструктор передаем объект, созданный на основе класса Flask
 db.init_app(app)
 
@@ -46,15 +47,17 @@ def create_article():
         article = Article(title=title, intro=intro, text=text)
 
         # Сохраняем созданный объект в базу данных
-        try:
-            db.session.add(article)     #Объект добавили
-            db.session.commit()         #Объект сохранили
-            return redirect('/materials')
-        except:
-            return "При добавлении статьи произошла ошибка"
+        if len(request.form['title']) > 2:
+            try:
+                db.session.add(article)     #Объект добавили
+                db.session.commit()         #Объект сохранили
+                flash('Статья успешно добавлена!', category='success')
+            except:
+                return "Ошибка при добавлении в БД"
+        else:
+            flash('Ошибка!', category="error")
 
-    else:
-        return render_template("create-article.html")
+    return render_template("create-article.html")
 
 @app.route('/materials')               
 def materials():
