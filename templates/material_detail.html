@@ -1,17 +1,23 @@
-{% extends 'base.html' %}     <!-- Указываем, что наследуем все от шаблона 'base.html' -->
+{% extends 'base.html' %}
 
 {% block title %}
-{{ article.title }}
+{{ article[1] }}
 {% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1>{{ article.title }}</h1>
-    <div class="alert alert-info" id="block">
-        <p id="date_art"><pre>{{ article.text }}</pre></p>
-        <p><b>Дата: {{ article.date.date() }}</b></p>
-        <a href="/materials/{{ article.id }}/delete" class="btn btn-danger">Удалить запись</a>
-        <a href="/materials/{{ article.id }}/update" class="btn btn-success">Редактировать</a>
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main">
+        <div class="container mt-5">
+            <h1 class="name_stat">{{ article[1] }}</h1><br>
+            <div class="alert-alert-info" id="block">
+                <p class="text_materials"><pre>{{ article[3] }}</pre></p><br>
+                <p><b>Дата: {{ article[4] }}</b></p>
+                <p><b>Автор: {{ article[5] }}</b></p>
+                <a href="/materials/{{ article.id }}/delete" class="btn-change">Удалить запись</a>
+                <a href="/materials/{{ article.id }}/update" class="btn-change">Редактировать</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

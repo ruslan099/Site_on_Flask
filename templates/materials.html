@@ -5,21 +5,29 @@
 {% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1>Все материалы сайта</h1>
-    <!-- C помощью синтаксиса Jinja проходимся по списку объекта articles и выводим записи из БД -->
-
-    {% if articles|length > 0 %}        <!-- Проверяем, есть ли статьи на сайте. Если нет, то выводим сообщение об этом -->
-        {% for el in articles %}
-        <div class="alert alert-info" id="block">
-            <h2>{{ el.title }}</h2>
-            <p>{{ el.intro }}</p>
-            <p id="date_art"><b>Дата: {{ el.date.date() }}</b></p>
-            <a href="/materials/{{ el.id }}" class="btn btn-warning">Подробнее</a>
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main">
+        <div class="materials">
+            <h1 class="name_stat">Все материалы сайта</h1>
+            {% for cat, msg in get_flashed_messages(True) %}
+            <div class="flash {{cat}}" id='success-text'>{{msg}}</div><br>
+            {% endfor %}
+            <!-- C помощью синтаксиса Jinja проходимся по списку объекта articles и выводим записи из БД -->
+            {% if articles|length > 0 %}        <!-- Проверяем, есть ли статьи на сайте. Если нет, то выводим сообщение об этом -->
+                {% for el in articles %}
+                <div class="alert-alert-info" id="block">
+                    <h2>{{ el.title }}</h2><br>
+                    <p>{{ el.intro }}</p><br>
+                    <p id="date_art"><b>Дата: {{ el.date }}</b></p>
+                    <p id="date_art"><b>Автор: {{ el.author }}</b></p>
+                    <a href="/materials/{{ el.id }}" class="btn-btn-warning">Подробнее</a>
+                </div><br>
+                {% endfor %}
+            {% else %}
+            <p>У нас пока что нет записей!</p>
+            {% endif %}
         </div>
-        {% endfor %}
-    {% else %}
-    <p>У нас пока что нет записей!</p>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

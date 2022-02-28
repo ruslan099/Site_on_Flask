@@ -1,19 +1,25 @@
-{% extends 'base.html' %}     <!-- Указываем, что наследуем все от шаблона 'base.html' -->
+{% extends 'base.html' %}
 
 {% block title %}
-Страница про нас
+Вход
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>Авторизация на сайте</h1>
-    <div class="alert alert-info" id="auth-block">
-        <form action="/create-article" method="post">     <!-- Создаем форму и Указываем, на какой странице будет производиться обработка данных -->
-            <label id="login_info"><b>Данный блок находится в разработке!</b></label><br>
-            <input type="email" name="login" id="login" class="form-control" placeholder="Логин"><br>
-            <input type="text" name="pwd" id="pwd" class="form-control" placeholder="Пароль"><br>
-            <input type="submit" class="btn btn-success" value="Войти" disabled>
-        </form>
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main_avtoriza">
+        <div class="pole_avtoriza" id="auth-block"><br>
+            <h1 class="name_avtoriza">Авторизация</h1><br>
+            {% for cat, msg in get_flashed_messages(True) %}
+            <div class="flash {{cat}}" id='success-text'>{{msg}}</div><br>
+            {% endfor %}
+            <form action="/login" method="post" class="form_avtoriza">
+                <input type="text" name="email" id="login" class="form-control" placeholder="Email"><br>
+                <input type="password" name="pwd" id="pwd" class="form-control" placeholder="Пароль"><br>
+                <input type="submit" class="btn-btn-success" value="Войти">
+                <p><a href="{{url_for('register')}}" class="link_reg">Регистрация</a>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

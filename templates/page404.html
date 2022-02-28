@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main">
+        <div class="container">
+            <h3>Запрашиваемая страница отсутствует на сервере!</h3>
+            <p>Вернуться на <a href="{{url_for('index')}}" class="link_reg">главную</a> страницу</p>
+        </div>
+        <img src="http://lamcdn.net/lookatme.ru/post_image-image/sIaRmaFSMfrw8QJIBAa8mA-small.png">
+    </div>
+</div>
+{% endblock %}

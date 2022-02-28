@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main">
+        <div class="container">
+            <h3>Вы не авторизованы!</h3>
+            <h4>Доступ к данной странице может получить только авторизованный пользователь!</h4>
+            <p>Выполнить <a href="{{url_for('login')}}" class="link_reg">вход</a> в аккаунт</p>
+        </div>
+        <img src="/static/img/err_401.png">
+    </div>
+</div>
+{% endblock %}

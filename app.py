@@ -1,120 +1,170 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-
+from flask import Flask, render_template, session, url_for, request, redirect, flash, redirect, url_for, abort, g
+import sqlite3
+from FDataBase import FDataBase
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
-app = Flask(__name__)           # Создаем объект на основе класса Flask и передаем в конструктор основной файл через __name__
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///blog.db'      #указываем название БД для работы
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False             #отключаем неработающий модуль
-app.config['SECRET_KEY'] = 'aweh234k2rn214uioh2189r23rn1982r3' #Секретный ключ для шифрования данных и вывода flash сообщений
-db = SQLAlchemy(app)               # Создаем объект на основе класса SQLalchemy и в конструктор передаем объект, созданный на основе класса Flask
-db.init_app(app)
+from UserLogin import UserLogin
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from FDataBase import FDataBase
 
-class Article(db.Model):        # Класс таблицы в базе данных, наследующий Все от объекта 'db'
-    # Прописываем поля, которые будут стобцами таблицы
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    intro = db.Column(db.String(300), nullable=False)    # Поле для вступительного текста
-    text = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)  #Устанавливается дата публикации(автоматически)
+app = Flask(__name__)
+app.config['DATABASE'] = 'blog.db'
+app.config['SECRET_KEY'] = '9af0aeaefe52af54f4aaabed1501b1db2bd2f29b'
 
-    # Когда выбираем объект на основе класса Article, будет выдаваться сам объект(статья) + его id
-    # Это нужно для показа самих статей
-    def __repr__(self):
-        return '<Article %r>' % self.id
+login_manager = LoginManager(app)
 
-@app.route('/')                 # Отслеживание перехода на главную страницу через Декоратор
+# Данный декоратор формирует экземпляр класса UserLogin
+# при каждом запросе от клиента
+@login_manager.user_loader
+def load_user(user_id):
+    db = get_db()
+    dbase = FDataBase(db)
+    print("load_user")
+    return UserLogin().fromDB(user_id, dbase)
+
+def connect_db():
+    conn = sqlite3.connect(app.config['DATABASE'])
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def create_db():
+    db = connect_db()
+    with app.open_resource('sq_db.sql', 'r') as file:
+        db.cursor().executescript(file.read())
+    db.commit
+    db.close
+
+def get_db():
+    """Соединение с БД, если оно еще не установлено"""
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
+
+@app.route('/')                
 @app.route('/home')
 def index():
-    return render_template("index.html")    # Подгрузка html файла
+    return render_template("index.html")    
 
-    
 @app.route('/about')               
 def about():
     return render_template("about.html")
 
-@app.route('/create-article', methods=['POST','GET'])                 # Отслеживание перехода
+@app.route('/create-article', methods=['POST','GET'])
+@login_required
 def create_article():
-    if request.method == "POST":                           #Проверяем какой метод отправки данных используется
-        # С помощью метода request получаем данные из формы "Создание статьи"
-        title = request.form['title']
-        intro = request.form['intro']
-        text = request.form['text']
-
-        # Создаем объект на основе класса Article
-        # и передаем в его конструктор данные полученные из формы выше
-        article = Article(title=title, intro=intro, text=text)
-
-        # Сохраняем созданный объект в базу данных
-        if len(request.form['title']) > 2:
-            try:
-                db.session.add(article)     #Объект добавили
-                db.session.commit()         #Объект сохранили
+    db = get_db()
+    dbase = FDataBase(db)
+    
+    if request.method == 'POST':
+        if len(request.form['title']) > 5 and len(request.form['intro']) > 5:
+            us_info = dbase.getUser(int(current_user.get_id()))
+            res = dbase.addArticle(request.form['title'], request.form['intro'], request.form['text'], us_info[1])
+            if not res:
+                flash('Ошибка при добавлении статьи в БД!', category="error")
+            else:
                 flash('Статья успешно добавлена!', category='success')
-            except:
-                return "Ошибка при добавлении в БД"
         else:
             flash('Ошибка!', category="error")
-
     return render_template("create-article.html")
 
 @app.route('/materials')               
 def materials():
-    # Создаем объект, через который будем получать все записи из базы данных
-    articles = Article.query.order_by(Article.date.desc()).all()                #query - обращается через класс к таблице БД
-    # Вытащили все записи из таблицы, отсортированные по полю 'date'
-    return render_template("materials.html", articles=articles)       # Передаем полученный выше список в шаблон
-    # Второй параметр отвечает за то, что мы в шаблоне будем иметь доступ к объекту,в котором есть список с нашими записями 
-    # по имени 'articles'
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template("materials.html", articles=dbase.getArticles())
 
 @app.route('/materials/<int:id>')           #Делаем динамическую подстановку 'id'
+@login_required
 def material_detail(id):
-    article = Article.query.get(id)         #Выводим запись по ее id через метод 'get'
-    return render_template("material_detail.html", article=article)       # Передаем полученный выше список в шаблон
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template("material_detail.html", article=dbase.seeArticle(id))
 
-# Делаем обработку адреса с удалением записи
-@app.route('/materials/<int:id>/delete')           
-def material_delete(id):
-    # Получаем необходимую запись из таблицы и сохраняем в объект "article"
-    article = Article.query.get_or_404(id)    #При работе с БД используем функцию "get_or_404" (в случае если не найдет, выдаст ошибку)    
-    try:
-        db.session.delete(article)          #С помощью метода "delete" удаляем указанную выше запись в объекте "article"
-        db.session.commit()
-        return redirect('/materials')
-    except: 
-        return "При удалении записи произошла ошибка!"
-
-# Редактирование записи
 @app.route('/materials/<int:id>/update', methods=['POST','GET'])                
 def material_update(id):
-    article = Article.query.get(id)     #Получаем всю запись из БД для дальнейшей подставновки перед редактированием
-    if request.method == "POST": 
-        # СРАЗУ устанавливаем данные из формы в указанный выше объект БД                          
-        article.title = request.form['title']
-        article.intro = request.form['intro']
-        article.text = request.form['text']
-
-        # Сохраняем созданный объект в базу данных
+    db = get_db()
+    dbase = FDataBase(db)
+    if request.method == 'POST':
         try:
-            db.session.commit()         #Объект сохранили
-            
+            dbase.updArticle(request.form['title'], request.form['intro'], request.form['text'], id)
+            flash('Статья успешно обновлена :)', category="success")
             return redirect('/materials')
         except:
             return "При редактировании статьи произошла ошибка"
 
-    else:
-        return render_template("material_update.html", article=article)
+    return render_template("material_update.html", article=dbase.seeArticle(id))
 
+@app.route('/materials/<int:id>/delete')           
+def material_delete(id):
+    db = get_db()
+    dbase = FDataBase(db)
+    try:
+        dbase.delArticle(id)
+        flash('Статья успешно удалена!', category="error")
+        return redirect('/materials')
+    except:
+        return 'Ошибка при удалении статьи'
 
-# -------------В разработке--------------
-@app.route('/login')               
+@app.route('/login', methods=['POST', 'GET'])
 def login():
+    db = get_db()
+    dbase = FDataBase(db)
+    if request.method == "POST":
+        user = dbase.getUserByEmail(request.form['email'])
+        if user and check_password_hash(user['pwd'], request.form['pwd']):
+            # Создаем экземпляр класса и передаем всю ин-фу о юзере
+            userlogin = UserLogin().create(user)
+            # Авторизуем данного юзера с помощью функции login_user
+            login_user(userlogin)
+            flash(f"Вы вошли в аккаунт под именем: {user['name']}", category='success')
+            return redirect(url_for('materials'))
+        else:
+            flash('Неверный логин или пароль', category='error')
+
     return render_template("login.html")
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash(f"Вы вышли из аккаунта!", category="success")
+    return redirect(url_for('login'))
 
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    db = get_db()
+    dbase = FDataBase(db)
+    if request.method == 'POST':
+        if len(request.form['name']) > 4 and len(request.form['email']) > 4 \
+        and len(request.form['pwd']) > 4 and request.form['pwd'] == request.form['pwd2'] :
+            hash = generate_password_hash(request.form['pwd'])
+            res = dbase.addUser(request.form['name'], request.form['email'], hash)
+            if res:
+                flash('Вы успешно зарегистрированы!', category='success')
+                return redirect(url_for('login'))
+            else:
+                flash('Ошибка при добавлении в БД!', category='error')
+        else:
+            flash('Минимальная длина полей - 4 символа!', category='error')
+    return render_template("register.html")
+
+
+@app.errorhandler(404)
+def page_not_dound(error):
+    return render_template('page404.html', title='Страница не найдена!')
+
+@app.errorhandler(401)
+def page_not_dound(error):
+    return render_template('page401.html', title='Упс!')
+
+@app.teardown_appcontext
+def close_db(error):
+    """Закрываем соединение с БД, если оно было установлено"""
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
 
 # Проверяем, является ли данный файл основным файлом для запуска
 # Если да, то запускаем как Flask-приложение
 if __name__ == '__main__':
-    app.run(debug=True)         #debug=True - выводим все ошибки прямо на сайт
+    app.run(debug=True)         

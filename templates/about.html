@@ -1,15 +1,24 @@
-{% extends 'base.html' %}     <!-- Указываем, что наследуем все от шаблона 'base.html' -->
+{% extends 'base.html' %}
 
 {% block title %}
 Страница про нас
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>Немного про нас</h1>
-    <div class="alert alert-info" id="info-block">
-        <p><h1 id="title_abt">Описание сайта</h1></p>
-        <p><h3 id="text_abt">Сайт создан для публикации учебного материала</h3></p>
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main">
+        <div class="container">
+            <div class="about-us" id="info-block">
+                <p><h3 id="text_abt">Сайт создан для публикации учебного материала студентам колледжа Бизнес-технологий</h3></p>
+                <p><h3></h3></p><br>
+                <p><h4>Разработчик сайта:</h4></p><br>
+                <p><h4>Студент Московского Колледжа Бизнес-технологий</h4></p>
+                <p><h4>Учебной группы ИБ32-19</h4></p>
+                <p><h4>Курбанов Руслан</h4></p><br>
+                <p><h4><a href="https://github.com/ruslan099" class="my-git">GitHub</a></h4></p><br>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

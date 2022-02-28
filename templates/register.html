@@ -1,0 +1,26 @@
+{% extends 'base.html' %}     <!-- Указываем, что наследуем все от шаблона 'base.html' -->
+
+{% block title %}
+Регистрация
+{% endblock %}
+
+{% block body %}
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main_avtoriza">
+        <div class="pole_avtoriza" id="auth-block"><br>
+            <h1 class="name_avtoriza">Регистрация</h1><br>
+            {% for cat, msg in get_flashed_messages(True) %}
+            <div class="flash {{cat}}" id='success-text'>{{msg}}</div><br>
+            {% endfor %}
+            <form action="/register" method="post" class="form_avtoriza">     <!-- Создаем форму и Указываем, на какой странице будет производиться обработка данных -->
+            <input type="text" name="name" id="login" class="form-control" placeholder="Имя"><br>
+            <input type="text" name="email" id="login" class="form-control" placeholder="Email"><br>
+            <input type="password" name="pwd" id="pwd" class="form-control" placeholder="Пароль"><br>
+            <input type="password" name="pwd2" id="pwd" class="form-control" placeholder="Повтор пароля"><br>
+            <input type="submit" class="btn-btn-success" value="Регистрация">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,48 +1,325 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {height: 100%;}
+
 body {
-    background: #b8b6b6;
+    background-color: #D7D3D6;
 }
 
-.my-2 {
-    font-size: 1.1em;
-}
-h1, h2, h3 {
-    font-family: "Roboto", sans-serif;
-}
-#crt_but {
-    margin-right: 10px;
-    margin-left: 10px;
+a {
+    text-decoration: none;
+    color: #fff;
 }
 
-#block {
-    border-radius: 30px;
-}
-
-#text_abt {
-    text-align: center;
-    color: black;
-}
-
-#title_abt {
+/*Работа с шапкой страницы*/
+.header {
+    width: 100%;
+    height: 50px;
+    background-color: #333;
+    color: #fafafa;
+    line-height: 50px;
+    border-bottom: 2px solid silver;
+    margin-bottom: 40px;
     text-align: center;
 }
 
-#date_art {
-    color: black;
+.menu_name {
+    display: inline;
+    text-align: center;
+    background: #333;
+    border-radius: 10%;
 }
 
-#btn-main  {
-    color: black;
+.main_menu_header li:not(:last-of-type) {      /*отступы между элементами списка(кроме последнего)*/
+    margin-right: 25px;
 }
 
-
-#osnovnoy {
-    height: 150px;
+.menu_name:hover :first-child{                  /*при наведении на элементы списка*/
+    color: #4A8AF4;
 }
 
-#login_info {
-    color: red;
-    margin-bottom: 1.2em;
+.menu_name:last-child{                          /*для последнего элемента списка*/
+    position: absolute;
+    right: 70px;
+    float: right;
+    font-family: Georgia, serif;
+    font-size: 18px;
 }
+
+/*Работа с логотипом страницы*/
+.logo-kbt {
+    width: 8%;
+    position: absolute;
+    margin-left: -650px;
+    margin-top: 4px;
+}
+/*Конец работы с логотипом страницы*/
+/*Конец работы с шапкой страницы*/
+
+
+/*Работа с центральной частью страницы*/
+.main {
+    flex: 1.1 auto;
+    width: 70%;
+    background-color: #D7D3D6;
+    position: relative;
+    left: 15%;
+    margin-bottom: 40px;
+    /* border: 2px solid #333; */
+}
+
+.about-us {
+    text-align: center;
+    margin-top: 90px;
+}
+
+.my-git {
+    color: #333;
+}
+
+.my-git:hover {
+    color: #4A8AF4;
+}
+
+/*Работа с страницей материалов*/
+.name_stat {
+    text-align: center;
+    color: #333;
+    font-family: Georgia;
+}
+
+.alert-alert-info {
+    color: #333;
+    font-size: 16px;
+    font-family: Georgia;
+    border: 2px solid #333;
+}
+
+.btn-btn-warning {
+    color: #D7D3D6;
+    background-color:#333;
+    border-radius: 5%;
+    font-size: large;
+}
+
+.btn-btn-warning:hover {
+    color: #333;
+    background-color: #D7D3D6;
+}
+
+pre {
+    color: #333;
+    font-size: 16px;
+    font-family: Georgia;
+}
+
+.btn-change {
+    color: #D7D3D6;
+    background-color: #333;
+}
+
+.btn-change:hover{
+    color: #333;
+    background-color: #D7D3D6;
+}
+
+.btn-change:not(:last-of-type) {      /*отступы между элементами списка(кроме последнего)*/
+    margin-right: 35px;
+}
+/*Конец работы с странице материалов*/
+
+
+/*Начало работы с страницей добавления материалов*/
+.name_text {
+    text-align: center;
+    font-family: Georgia;
+    color: #333;
+    margin-top: 20px;
+}
+
+.form-change-material {
+    width: 200px;
+    height: 24px;
+    margin-bottom: 3px;
+    background-color: #fff;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-family: Tahoma;
+    margin-left: 330px;
+    margin-top: 20px;
+}
+
+.form-area-cratko {
+    width: 500px;
+    height: 50px;
+    margin-bottom: 3px;
+    background-color: #fff;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-family: Tahoma;
+    resize: unset;
+    margin-top: 3px;
+}
+
+.form-area-main-text {
+    width: 500px;
+    height: 280px;
+    margin-bottom: 3px;
+    background-color: #fff;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-family: Tahoma;
+    resize: unset;
+}
+
+#success-text {
+    font-size: 14px;
+    font-family: Georgia;
+}
+/*Конец работы с страницей добавления материалов*/
+
+
+/*Начало работы с редактированием страницы (update)*/
+.name-text-update {
+    text-align: center;
+    font-family: Georgia;
+    color: #333;
+    margin-top: 20px;
+}
+
+.form-update-material {
+    width: 200px;
+    height: 24px;
+    margin-bottom: 3px;
+    background-color: #fff;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-family: Tahoma;
+    margin-left: 330px;
+    margin-top: 20px;
+}
+/*Конец работы с редактированием страницы (update)*/
+
+
+/*Стили к странице Авторизации*/
+.main_avtoriza {
+    width: 30%;
+    position: relative;
+    left: 35%;
+    background-color: #D7D3D6;
+}
+
+.name_avtoriza {
+    text-align: center;
+    color: #333;
+    background-color: #D7D3D6;
+    font-family: Tahoma;
+}
+
+.pole_avtoriza {
+    text-align: center;
+    background-color: #D7D3D6;
+    margin-bottom: 80%;
+    margin-top: 15px;
+    border: 2px solid #333;
+}
+
+.form-control {
+    width: 200px;
+    height: 24px;
+    margin-bottom: 3px;
+    background-color: #fff;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-family: Tahoma;
+}
+
+.btn-btn-success {
+    width: 100px;
+    height: 24px;
+    margin-bottom: 30px;
+    border-radius: 5%;
+    background-color: #fff;
+    border: 1px solid #333;
+    font-size: 15px;
+    font-family: Tahoma;
+    margin-top: 15px;
+}
+
+.btn-btn-success:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.link_reg {
+    color: rgba(221, 0, 0, 0.788);
+}
+
+.link_reg:hover {
+    color: #000000;
+}
+/*Конец блока стилей к странице авторизация*/
+/*Конец работы с центральной частью страницы*/
+
+
+/*Работа с футером страницы*/
+.footer {
+    width: 100%;
+    height: 50px;
+    background-color: #333;
+    color: #fafafa;
+    line-height: 50px;
+    border-top: 1px solid silver;
+    text-align: center;
+}
+
+#wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu_footer {
+    display: inline;
+    text-align: center;
+    background: #333;
+    border-radius: 10%;
+}
+
+.main_menu_footer li:not(:last-of-type) {      /*отступы между элементами списка(кроме последнего)*/
+    margin-right: 25px;
+}
+
+.menu_footer:first-child{                         /*для первого элемента списка*/
+    position: absolute;
+    left: 100px;
+    float:left;
+    font-size: 18px;
+    font-family: Georgia, serif;
+}
+
+.menu_footer:last-of-type{                          /*для последнего элемента списка*/
+    position: absolute;
+    right: 70px;
+    float: right;
+    font-size: 14px;
+}
+
+.menu_footer:hover :first-child, .menu_footer:hover :last-child{               /*при наведении на элементы списка*/
+    color: #4A8AF4;
+}
+
+.logo-vk {
+    width: 2%;
+    position: absolute;
+    margin-left: 400px;
+    margin-top: 15px;
+}
+
+/*Конец работы с футером сайта*/
 
 .flash {padding: 10px;}
 

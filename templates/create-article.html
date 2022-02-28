@@ -5,16 +5,19 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>Добавление записи на сайт</h1>
-    {% for cat, msg in get_flashed_messages(True) %}
-    </div class="flash {{cat}}">{{msg}}</div>
-    {% endfor %}
-    <form action="/create-article" method="post">     <!-- Создаем форму и Указываем, на какой странице будет производиться обработка данных -->
-        <input type="text" name="title" id="title" class="form-control" placeholder="Введите название"><br>
-        <textarea name="intro" id="intro" class="form-control" placeholder="Краткая информация"></textarea><br>
-        <textarea name="text" id="osnovnoy" class="form-control" placeholder="Основной текст"></textarea><br>
-        <input type="submit" class="btn btn-success" value="Создать">
-    </form>
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main">
+        <h1 class="name_text">Добавить запись</h1>
+        <form action="/create-article" method="post" class="form-change-material">     <!-- Создаем форму и Указываем, на какой странице будет производиться обработка данных -->
+            <input type="text" name="title" class="form-control" placeholder="Введите название"><br>
+            <textarea name="intro" class="form-area-cratko" placeholder="Краткая информация"></textarea><br>
+            <textarea name="text" class="form-area-main-text" placeholder="Основной текст"></textarea><br>
+            {% for cat, msg in get_flashed_messages(True) %}
+            <div class="flash {{cat}}" id='success-text'>{{msg}}</div><br>
+            {% endfor %}
+            <input type="submit" class="btn-btn-success" value="Создать">
+        </form>
+    </div>
 </div>
 {% endblock %}

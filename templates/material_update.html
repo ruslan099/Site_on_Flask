@@ -5,13 +5,18 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>Редактирование записи</h1>
-    <form method="post">     <!-- Создаем форму -->
-        <input type="text" name="title" id="title" class="form-control" value="{{ article.title }}" placeholder="Введите название"><br>
-        <textarea name="intro" id="intro" class="form-control" placeholder="Краткая информация">{{ article.intro }}</textarea><br>
-        <textarea name="text" id="osnovnoy" class="form-control" placeholder="Основной текст">{{ article.text }}</textarea><br>
-        <input type="submit" class="btn btn-success" value="Сохранить">
-    </form>
+<div id="wrapper">
+    <div class="aside"></div>
+    <div class="main">
+        <div class="container">
+            <h1 class="name-text-update">Редактирование записи</h1>
+            <form method="post" class="form-update-material">     <!-- Создаем форму -->
+                <input type="text" name="title" id="title" class="form-control" value="{{ article[1] }}" placeholder="Введите название"><br>
+                <textarea name="intro" id="intro" class="form-area-cratko" placeholder="Краткая информация">{{ article[2] }}</textarea><br>
+                <textarea name="text" id="osnovnoy" class="form-area-main-text" placeholder="Основной текст">{{ article[3] }}</textarea><br>
+                <input type="submit" class="btn-btn-success" value="Сохранить">
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
